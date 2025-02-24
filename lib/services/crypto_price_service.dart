@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/crypto_price_data.dart';
+import '../config/environment.dart';
 
 class CryptoPriceService {
-  static const String baseUrl = 'http://localhost:8080/api';
+  static String get baseUrl => Environment.apiUrl;
   static const List<String> supportedSymbols = ['BTC', 'ETH', 'USDC', 'SHIB', 'LCX', 'DOGE', 'LINK', 'SOL'];
 
   Future<MarketDataResponse> getMarketData() async {
@@ -12,6 +13,11 @@ class CryptoPriceService {
         Uri.parse('$baseUrl/market-data'),
         headers: {
           'Accept': 'application/json',
+        },
+      ).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw Exception('Request timeout');
         },
       );
 
@@ -32,6 +38,11 @@ class CryptoPriceService {
         Uri.parse('$baseUrl/market-data/refresh'),
         headers: {
           'Accept': 'application/json',
+        },
+      ).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw Exception('Request timeout');
         },
       );
 

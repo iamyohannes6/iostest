@@ -11,20 +11,9 @@ List<CryptoListItem> getCryptoAssets(BuildContext context) {
   
   return settingsProvider.currencies.where((currency) => currency.isEnabled).map((currency) {
     final priceData = priceProvider.getPriceDataForSymbol(currency.symbol);
-    if (priceData == null) {
-      return const CryptoListItem(
-      icon: SizedBox(),
-      name: '',
-      symbol: '',
-      amount: '€0.00',
-      cryptoAmount: '0.00',
-      changePercentage: 0.00,
-      isPositive: true,
-    );
-    }
     
     double amount = double.tryParse(currency.amount) ?? 0.0;
-    double changePercentage = priceData.change24h;
+    double changePercentage = priceData?.change24h ?? 0.0;
     
     return CryptoListItem(
       icon: Container(
